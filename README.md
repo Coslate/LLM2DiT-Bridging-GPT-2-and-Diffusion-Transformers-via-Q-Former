@@ -248,7 +248,7 @@ These heatmaps reveal **which text tokens each query focuses on**, and can be us
 We assume you already have a pretrained DiT checkpoint on CIFAR‑10:
 
 ```text
-./models/ddpm_dit_cifar.pth
+./experiments/base_dit/ddpm_dit_cifar_100_epochs.pth
 ```
 
 This checkpoint is used as initialization; during Q‑Former training, **DiT weights are frozen** and only the query module is updated.
@@ -259,9 +259,9 @@ From the repo root:
 
 ```bash
 python -m src.train_qformer \
-  --pretrained_model_path ./models/ddpm_dit_cifar.pth \
+  --pretrained_model_path ./experiments/base_dit/ddpm_dit_cifar_100_epochs.pth \
   --dense_captions_path ./data/cifar10_dense_captions.jsonl \
-  --data_dir ./data/cifar10 \
+  --data_dir ./data \
   --epochs 20 \
   --batch_size 128 \
   --lr 1e-4 \
