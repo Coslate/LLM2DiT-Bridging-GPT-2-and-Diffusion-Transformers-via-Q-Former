@@ -10,10 +10,12 @@ This repo implements **LLM2DiT**, a small-scale research project that bridges an
 The goal is to prototype and analyze how text representations from a causal LM can be injected into a diffusion transformer via a learned query module.
 
 ## Architecture
+<p align="center">
+  <img src="assets/llm2dit_qformer_arch.png" width="600">
+</p>
 
-![LLM2DiT Q-Former architecture](assets/overview_arch.png)
+<p align="center"><em>Figure 1. Q-Former architecture bridging GPT-2 and DiT for text-to-image generation.</em></p>
 
-*Figure 1. Q-Former architecture bridging GPT-2 and DiT for text-to-image generation.*
 
 ---
 
