@@ -11,7 +11,7 @@ The goal is to prototype and analyze how text representations from a causal LM c
 
 ## Architecture
 <p align="center">
-  <img src="assets/llm2dit_qformer_arch.png" width="600">
+  <img src="assets/overview_arch.png" width="600">
 </p>
 
 <p align="center"><em>Figure 1. Q-Former architecture bridging GPT-2 and DiT for text-to-image generation.</em></p>
