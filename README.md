@@ -275,7 +275,7 @@ python -m src.train_qformer \
   --save_model_path ./experiments/qformer_dense/checkpoints/ddpm_dit_cifar_qformer_dense.pth \
   --num_query_tokens 4 \
   --transformer_hidden_size 768 \
-  --gpt2_layer_index 11 \
+  --gpt2_layer_index 12 \
   --cache_text_embeddings ./data/text_embeddings.pt
 ```
 
@@ -333,9 +333,9 @@ Example config: `configs/inference_classes.yaml`
 ```yaml
 Image_Generation_Configs:
   - device: 0
-    model_path: ./experiments/basic_dit/ddpm_dit_cifar_qformer_dense.pth
+    model_path: ./experiments/basic_dit/ddpm_dit_cifar_100_epochs.pth
     save_path: ./experiments/qformer_dense/samples/classes
-    cfg: 0.0
+    cfg: 3.0
 
     num_query_tokens: 4
     transformer_hidden_size: 768
@@ -348,7 +348,7 @@ Image_Generation_Configs:
     # class ids 0-9 follow CIFAR-10 order:
     # 0 airplane, 1 automobile, 2 bird, 3 cat, 4 deer,
     # 5 dog, 6 frog, 7 horse, 8 ship, 9 truck
-    classes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    classes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 3, 4]
 ```
 
 Run:
@@ -360,10 +360,18 @@ python -m src.eval_qformer --config_yaml configs/inference_classes.yaml
 This will produce:
 
 ```text
-experiments/qformer_dense/samples/sample_qformer_infer_last.png
+experiments/qformer_dense/samples/classes/sample_qformer_infer_last.png
 ```
 
 containing a grid of class‑conditioned samples (no GPT‑2 context used; DiT uses label embedding only).
+
+> **Visualization here:**  
+> - Generated images for each labels in order.  
+<p align="center">
+  <img src="./experiments/qformer_dense/samples/classes/sample_qformer_infer_last.png" width="600">
+</p>
+
+<p align="center"><em>Figure 2. Example generation for classes.</em></p>
 
 ---
 
@@ -383,7 +391,7 @@ Image_Generation_Configs:
     n_T: 1000
     beta1: 1.0e-4
     beta2: 2.0e-2
-    gpt2_layer_index: 11
+    gpt2_layer_index: 12
     gpt2_cache_dir: ./data/gpt2
 
     # Exactly one of `classes` or `prompts` must be set.
@@ -410,7 +418,11 @@ This will:
 
 > **Visualization here:**  
 > - Generated image grids per prompt set.  
-> - These can be pasted directly into slides as qualitative results.
+<p align="center">
+  <img src="./experiments/qformer_dense/samples/prompts/sample_qformer_infer_last.png" width="600">
+</p>
+
+<p align="center"><em>Figure 3. Example generation for prompts conditioned.</em></p>
 
 ---
 
@@ -440,6 +452,7 @@ Image_Generation_Configs:
     attn_timesteps:
       - 500     # t = 500
       - 100     # t = 100
+
 
 
 ```
@@ -472,6 +485,18 @@ Each PNG is a `[Q, K]` heatmap:
 > **Visualization here:**  
 > - These heatmaps clearly show which tokens each query attends to over the sampling trajectory.  
 > - You can check whether Q‑Former spreads attention across relevant tokens or collapses onto a single position (attention sink).
+
+<p align="center">
+  <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t100.png" width="600">
+</p>
+
+<p align="center"><em>Figure 4. Attention map with t=100. </em></p>
+
+<p align="center">
+  <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t500.png" width="600">
+</p>
+
+<p align="center"><em>Figure 4. Attention map with t=500. </em></p>
 
 ---
 
@@ -539,6 +564,18 @@ experiments/ood/ood_vehicle_water/
 > **Visualization here:**  
 > - Here shows the difference between two rows of images.  
 > - The water parts shows OOD.
+
+<p align="center">
+  <img src="./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png" width="600">
+</p>
+
+<p align="center"><em>Figure 5. Vehicles go on grass. </em></p>
+
+<p align="center">
+  <img src="./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png" width="600">
+</p>
+
+<p align="center"><em>Figure 6. Vehicles go in water. </em></p>
 
 ---
 

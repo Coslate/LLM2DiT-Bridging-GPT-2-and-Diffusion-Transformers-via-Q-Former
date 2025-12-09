@@ -1,18 +1,17 @@
 Image_Generation_Configs:
-  - device: 0
-    model_path: ./experiments/basic_dit/ddpm_dit_cifar_qformer_dense.pth
+  - model_path: ./experiments/base_dit/ddpm_dit_cifar_100_epochs.pth
     save_path: ./experiments/qformer_dense/samples/classes
-    cfg: 0.0
+    cfg: 3.0
 
     num_query_tokens: 4
     transformer_hidden_size: 768
     n_T: 1000
     beta1: 1.0e-4
     beta2: 2.0e-2
-    gpt2_layer_index: 11
+    gpt2_layer_index: 12
     gpt2_cache_dir: ./data/gpt2
 
     # class ids 0-9 follow CIFAR-10 order:
     # 0 airplane, 1 automobile, 2 bird, 3 cat, 4 deer,
     # 5 dog, 6 frog, 7 horse, 8 ship, 9 truck
-    classes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+    classes: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 3, 4]

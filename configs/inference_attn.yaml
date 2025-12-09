@@ -17,7 +17,7 @@ Image_Generation_Configs:
       - "a photo of a red airplane with a green field in the background"
 
     # turn on attention capture
-    attn_save_dir: ./red_plane_cross_attn_maps
+    attn_save_dir: ./experiments/attn_maps/red_plane_cross_attn_maps
     attn_timesteps:
       - 500     # t = 500
       - 100     # t = 100

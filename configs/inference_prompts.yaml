@@ -1,6 +1,6 @@
 Image_Generation_Configs:
   - device: 0
-    model_path: ./experiments/basic_dit/ddpm_dit_cifar_qformer_dense.pth
+    model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
     save_path: ./experiments/qformer_dense/samples/prompts
     cfg: 2.0                      # classifier-free guidance scale
 
@@ -9,7 +9,7 @@ Image_Generation_Configs:
     n_T: 1000
     beta1: 1.0e-4
     beta2: 2.0e-2
-    gpt2_layer_index: 11
+    gpt2_layer_index: 12
     gpt2_cache_dir: ./data/gpt2
 
     # Exactly one of `classes` or `prompts` must be set.
