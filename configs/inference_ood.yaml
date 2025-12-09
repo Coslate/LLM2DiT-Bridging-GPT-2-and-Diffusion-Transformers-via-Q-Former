@@ -3,7 +3,7 @@ Image_Generation_Configs:
 
   - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
     cfg: 3.0
-    save_path: ./ood_vehicle_grass
+    save_path: ./experiments/ood/ood_vehicle_grass
     num_query_tokens: 4
     transformer_hidden_size: 768
     n_T: 1000
@@ -19,7 +19,7 @@ Image_Generation_Configs:
 
   - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
     cfg: 3.0
-    save_path: ./ood_vehicle_water
+    save_path: ./experiments/ood/ood_vehicle_water
     num_query_tokens: 4
     transformer_hidden_size: 768
     n_T: 1000

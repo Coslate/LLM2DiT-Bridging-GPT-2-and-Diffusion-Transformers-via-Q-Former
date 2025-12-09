@@ -9,6 +9,12 @@ This repo implements **LLM2DiT**, a small-scale research project that bridges an
 
 The goal is to prototype and analyze how text representations from a causal LM can be injected into a diffusion transformer via a learned query module.
 
+## Architecture
+
+![LLM2DiT Q-Former architecture](assets/overview_arch.png)
+
+*Figure 1. Q-Former architecture bridging GPT-2 and DiT for text-to-image generation.*
+
 ---
 
 ## Repository structure
@@ -325,7 +331,7 @@ Example config: `configs/inference_classes.yaml`
 ```yaml
 Image_Generation_Configs:
   - device: 0
-    model_path: ./experiments/qformer_dense/checkpoints/ddpm_dit_cifar_qformer_dense.pth
+    model_path: ./experiments/basic_dit/ddpm_dit_cifar_qformer_dense.pth
     save_path: ./experiments/qformer_dense/samples/classes
     cfg: 0.0
 
@@ -412,26 +418,28 @@ Example config: `configs/inference_attn.yaml`
 
 ```yaml
 Image_Generation_Configs:
-  - device: 0
-    model_path: ./experiments/qformer_dense/checkpoints/ddpm_dit_cifar_qformer_dense.pth
-    save_path: ./experiments/qformer_dense/samples/attn
-    cfg: 2.0
 
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 3.0
+    save_path: ./red_plane_cross_attn_samples
     num_query_tokens: 4
     transformer_hidden_size: 768
     n_T: 1000
-    beta1: 1.0e-4
-    beta2: 2.0e-2
-    gpt2_layer_index: 11
-    gpt2_cache_dir: ./data/gpt2
+    beta1: 1e-4
+    beta2: 2e-2
+    gpt2_layer_index: 12
+    gpt2_cache_dir: "./data"
 
     prompts:
-      - "a small red truck driving on a road"
-      - "a yellow airplane flying over the sea"
+      - "a photo of a red airplane with a green field in the background"
 
-    # Attention visualization
-    attn_save_dir: ./experiments/attn_maps/truck_airplane
-    attn_timesteps: [1000, 750, 500, 250, 1]
+    # turn on attention capture
+    attn_save_dir: ./experiments/attn_maps/red_plane_cross_attn_maps
+    attn_timesteps:
+      - 500     # t = 500
+      - 100     # t = 100
+
+
 ```
 
 Run:
@@ -449,12 +457,9 @@ This will:
 3. Call `view_qformer_attn` to generate heatmaps:
 
 ```text
-experiments/attn_maps/truck_airplane/
-  qformer_attn_t1000.png
-  qformer_attn_t750.png
+experiments/attn_maps/red_plane_cross_attn_maps/
   qformer_attn_t500.png
-  qformer_attn_t250.png
-  qformer_attn_t1.png
+  qformer_attn_t100.png
 ```
 
 Each PNG is a `[Q, K]` heatmap:
@@ -465,6 +470,73 @@ Each PNG is a `[Q, K]` heatmap:
 > **Visualization here:**  
 > - These heatmaps clearly show which tokens each query attends to over the sampling trajectory.  
 > - You can check whether Q‑Former spreads attention across relevant tokens or collapses onto a single position (attention sink).
+
+---
+
+### 4. Out-of-Distribution (OOD) Generation
+
+Example config: `configs/inference_attn.yaml`
+
+```yaml
+Image_Generation_Configs:
+  # ... your existing entries ...
+
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 3.0
+    save_path: ./experiments/ood/ood_vehicle_grass
+    num_query_tokens: 4
+    transformer_hidden_size: 768
+    n_T: 1000
+    beta1: 1.0e-4
+    beta2: 2.0e-2
+    gpt2_layer_index: 12
+    gpt2_cache_dir: ./data
+    prompts:
+      - "a photo of a vehicle that goes on grass"
+      - "a photo of a vehicle that goes on grass"
+      - "a photo of a vehicle that goes on grass"
+      - "a photo of a vehicle that goes on grass"
+
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 3.0
+    save_path: ./experiments/ood/ood_vehicle_water
+    num_query_tokens: 4
+    transformer_hidden_size: 768
+    n_T: 1000
+    beta1: 1.0e-4
+    beta2: 2.0e-2
+    gpt2_layer_index: 12
+    gpt2_cache_dir: ./data
+    prompts:
+      - "a photo of a vehicle that goes in water"
+      - "a photo of a vehicle that goes in water"
+      - "a photo of a vehicle that goes in water"
+      - "a photo of a vehicle that goes in water"
+
+```
+
+Run:
+
+```bash
+python -m src.eval_qformer --config_yaml configs/inference_ood.yaml
+```
+
+This will:
+
+1. Run the same sampling as above.
+2. Generate 4 images in a row and save as ./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png
+4. Generate 4 images in a row and save as ./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png
+
+```text
+experiments/ood/ood_vehicle_grass/
+  sample_qformer_infer_last.png
+experiments/ood/ood_vehicle_water/
+  sample_qformer_infer_last.png
+```
+
+> **Visualization here:**  
+> - Here shows the difference between two rows of images.  
+> - The water parts shows OOD.
 
 ---
 

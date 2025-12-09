@@ -1,0 +1,20 @@
+Image_Generation_Configs:
+  - device: 0
+    model_path: ./experiments/basic_dit/ddpm_dit_cifar_qformer_dense.pth
+    save_path: ./experiments/qformer_dense/samples/prompts
+    cfg: 2.0                      # classifier-free guidance scale
+
+    num_query_tokens: 4
+    transformer_hidden_size: 768
+    n_T: 1000
+    beta1: 1.0e-4
+    beta2: 2.0e-2
+    gpt2_layer_index: 11
+    gpt2_cache_dir: ./data/gpt2
+
+    # Exactly one of `classes` or `prompts` must be set.
+    prompts:
+      - "a photo of a blue airplane in the sky"
+      - "a small red truck on a road"
+      - "a brown horse running on grass"
+      - "a green frog sitting near water"
