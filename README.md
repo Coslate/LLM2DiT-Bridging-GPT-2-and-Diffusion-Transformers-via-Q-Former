@@ -496,7 +496,7 @@ Each PNG is a `[Q, K]` heatmap:
   <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t500.png" width="600">
 </p>
 
-<p align="center"><em>Figure 4. Attention map with t=500. </em></p>
+<p align="center"><em>Figure 5. Attention map with t=500. </em></p>
 
 ---
 
@@ -569,13 +569,13 @@ experiments/ood/ood_vehicle_water/
   <img src="./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 5. Vehicles go on grass. </em></p>
+<p align="center"><em>Figure 6. Vehicles go on grass. </em></p>
 
 <p align="center">
   <img src="./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 6. Vehicles go in water. </em></p>
+<p align="center"><em>Figure 7. Vehicles go in water. </em></p>
 
 ---
 
