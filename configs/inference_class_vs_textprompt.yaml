@@ -1,0 +1,49 @@
+Image_Generation_Configs:
+  # ------------------------------------------------------------------
+  # (A) Baseline: pretrained class-conditional DiT, class = automobile
+  # ------------------------------------------------------------------
+  - model_path: ./data/ddpm_dit_cifar_100_epochs.pth   # or wherever yours is
+    cfg: 3.0
+    save_path: ./cars_pretrained_class_cond
+    classes:
+      - 1   # CIFAR-10 label 1 = automobile
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1
+      - 1   # 8 cars
+
+  # ------------------------------------------------------------------
+  # (B) Q-Former DiT with text prompt
+  # ------------------------------------------------------------------
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 3.0
+    save_path: ./cars_qformer_text_cond
+    prompts:
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+    gpt2_cache_dir: ./data
+    gpt2_layer_index: 12   # same index you used for training
+
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 4.0
+    save_path: ./cars_qformer_text_cond_cfg4
+    prompts:
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+      - "a photo of a blue automobile with a bright blue sky"
+    gpt2_cache_dir: ./data
+    gpt2_layer_index: 12   # same index you used for training

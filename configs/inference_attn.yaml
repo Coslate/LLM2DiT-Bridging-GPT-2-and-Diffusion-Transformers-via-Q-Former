@@ -1,0 +1,23 @@
+Image_Generation_Configs:
+  # ... your earlier blocks ...
+
+  - model_path: /data/patrick/10623-hw4/models/trained_qformer.pth
+    cfg: 3.0
+    save_path: ./red_plane_cross_attn_samples
+    num_query_tokens: 4
+    transformer_hidden_size: 768
+    n_T: 1000
+    beta1: 1e-4
+    beta2: 2e-2
+    gpt2_layer_index: 12
+    gpt2_cache_dir: "./data"
+
+    # <-- use text instead of CIFAR class labels
+    prompts:
+      - "a photo of a red airplane with a green field in the background"
+
+    # turn on attention capture
+    attn_save_dir: ./red_plane_cross_attn_maps
+    attn_timesteps:
+      - 500     # t = 500
+      - 100     # t = 100

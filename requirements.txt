@@ -1,0 +1,9 @@
+torch
+wandb
+Pillow
+torchvision
+tqdm
+pyyaml
+matplotlib
+numpy
+transformers==4.46.3
