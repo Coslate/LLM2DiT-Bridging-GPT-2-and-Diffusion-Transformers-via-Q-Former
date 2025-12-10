@@ -688,7 +688,7 @@ Finally, I visualize Q-Former cross-attention for a caption such as “a photo o
 Across timesteps, I observe a strong **attention sink** pattern: most queries allocate the majority of their mass to the first token, while semantically important words like “red,” “airplane,” and “green field” receive noticeably less attention. The pattern changes only mildly as sampling progresses—later timesteps spread a bit more weight to noun tokens, but the first position remains dominant. The final generated image still roughly matches “airplane + outdoors,” which implies that the first token’s representation has collapsed into a global summary of the whole caption. This behavior motivates future work: introducing regularizers or architectural changes to encourage more balanced use of the full sequence and reduce reliance on a single summary token.
 
 <p align="center">
-  <img src="./assets/attn_analysis.png" width="600">
+  <img src="./assets/attn_analysis.png" width="900">
 </p>
 
 <p align="center"><em>Figure 14. Cross-Attention Map Analysis </em></p>
