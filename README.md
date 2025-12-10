@@ -51,7 +51,7 @@ LLM2DiT/
 │     └─ attention_visualization.py  # Capture + plot Q‑Former cross‑attention
 │
 ├─ data/
-│  ├─ cifar10/cifar-10-batches-py  # CIFAR‑10 images (downloaded by torchvision)
+│  ├─ cifar-10-batches-py          # CIFAR‑10 images (downloaded by torchvision)
 │  ├─ cifar10_dense_captions.jsonl # Dense captions per CIFAR‑10 image (external). Can be downloaded from provided link as below.
 │  ├─ text_embeddings.pt           # GPT‑2 hidden‑state cache (generated automatically). Can be downloaded from provided link as below.
 │  └─ models--gpt2/                # HuggingFace GPT‑2 cache
@@ -129,8 +129,7 @@ wandb login
 
 ```bash
 data/
-  cifar10/
-    cifar-10-batches-py/
+  cifar-10-batches-py/
     ...
 ```
 
