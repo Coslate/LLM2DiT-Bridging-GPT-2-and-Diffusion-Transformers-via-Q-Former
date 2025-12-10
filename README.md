@@ -602,13 +602,13 @@ experiments/ood/ood_vehicle_water/
   <img src="./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 9. Vehicles Go on Grass. </em></p>
+<p align="center"><em>Figure 9. Vehicle Goes on Grass. </em></p>
 
 <p align="center">
   <img src="./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 10. Vehicles Go in Water. </em></p>
+<p align="center"><em>Figure 10. Vehicle Goes in Water. </em></p>
 
 ---
 
