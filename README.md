@@ -311,7 +311,7 @@ python -m src.train_qformer \
   <img src="./assets/loss.png" width="600">
 </p>
 
-<p align="center"><em>Figure 2. Training Loss Curve for First 1k Steps. </em></p>
+<p align="center"><em>Figure 2. Training Loss Curve. </em></p>
 
 <p align="center">
   <img src="./assets/loss_ema.png" width="600">
