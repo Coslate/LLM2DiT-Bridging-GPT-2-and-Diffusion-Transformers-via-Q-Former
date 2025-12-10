@@ -125,7 +125,7 @@ wandb login
 
 ### CIFAR‑10
 
-`train_qformer.py` uses `torchvision.datasets.CIFAR10` and will automatically download CIFAR‑10 to `--data_dir` (default: `./data/cifar10`):
+`train_qformer.py` uses `torchvision.datasets.CIFAR10` and will automatically download CIFAR‑10 to `--data_dir`:
 
 ```bash
 data/
