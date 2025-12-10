@@ -1,7 +1,7 @@
 Image_Generation_Configs:
   - model_path: ./experiments/base_dit/ddpm_dit_cifar_100_epochs.pth
     save_path: ./experiments/qformer_dense/samples/classes
-    cfg: 3.0
+    cfg: 3.68
 
     num_query_tokens: 4
     transformer_hidden_size: 768

@@ -9,7 +9,7 @@ This repo implements **LLM2DiT**, a small-scale research project that bridges an
 
 The goal is to prototype and analyze how text representations from a causal LM can be injected into a diffusion transformer via a learned query module.
 
-## Architecture
+## Model Architecture
 <p align="center">
   <img src="assets/overview_arch.png" width="600">
 </p>
@@ -262,7 +262,7 @@ python -m src.train_qformer \
   --pretrained_model_path ./experiments/base_dit/ddpm_dit_cifar_100_epochs.pth \
   --dense_captions_path ./data/cifar10_dense_captions.jsonl \
   --data_dir ./data \
-  --epochs 20 \
+  --epochs 50 \
   --batch_size 128 \
   --lr 1e-4 \
   --weight_decay 0.01 \
@@ -275,7 +275,9 @@ python -m src.train_qformer \
   --save_model_path ./experiments/qformer_dense/checkpoints/ddpm_dit_cifar_qformer_dense.pth \
   --num_query_tokens 4 \
   --transformer_hidden_size 768 \
+  --cfg 3.0 \
   --gpt2_layer_index 12 \
+  --gpt2_cache_dir ./data \
   --cache_text_embeddings ./data/text_embeddings.pt
 ```
 
@@ -283,7 +285,7 @@ python -m src.train_qformer \
 
 - GPT‑2 base:
   - Loaded from `"gpt2"` into `data/gpt2/` (HuggingFace cache).
-  - `gpt2_layer_index` selects a **single hidden layer** (e.g., 11 = last layer for GPT‑2 small).
+  - `gpt2_layer_index` selects a **single hidden layer** (e.g., 12 = last layer for GPT‑2 small).
 - First run will:
   - Build and cache text embeddings into `data/text_embeddings.pt`.
 - Each epoch:
@@ -299,12 +301,41 @@ python -m src.train_qformer \
   - Save a PNG grid:
     - `experiments/qformer_dense/sample_qformer_dense_{epoch}_last.png`
   - Periodically save optimizer + model checkpoints into:
-    - `experiments/qformer_dense/checkpoints/optimizer_epoch_*.pt`
-    - `experiments/qformer_dense/checkpoints/model_epoch_*.pth`
+    - `experiments/qformer_dense/optimizer_ckpts/optimizer_epoch_*.pt`
+    - `experiments/qformer_dense/optimizer_ckpts/model_epoch_*.pth`
 
 > **Visualizations for training**  
 > - **Loss curves**: from WandB (or you can export and plot offline).  
 > - **Sample grids**: PNGs in `experiments/qformer_dense/` to qualitatively inspect convergence.
+
+<p align="center">
+  <img src="./assets/loss.png" width="600">
+</p>
+
+<p align="center"><em>Figure 2. Training Loss Curve for First 1k Steps. </em></p>
+
+<p align="center">
+  <img src="./assets/loss_ema.png" width="600">
+</p>
+
+<p align="center"><em>Figure 3. Training Exponential Moving Average (EMA) Loss Curve for First 1k Steps. </em></p>
+
+<p align="center">
+  <img src="./experiments/qformer_dense/grid_epoch_5_25_49.png" width="600">
+</p>
+
+<p align="center"><em>Figure 4. Sample Grids from Epoch 5, 25, and 49. </em></p>
+
+From epoch 5 to epoch 25, image quality improves noticeably: early samples are quite blurry with
+unclear object boundaries, and several images where the CIFAR class is ambiguous. By epoch
+25 the images are much sharper, with clearer shapes, more realistic colors, and backgrounds that
+match the scene (e.g., cars on roads, animals in natural settings), so the generated samples usually
+correspond to the intended class.
+Between epoch 25 and epoch 49 the improvements are more incremental. Epoch-49 samples show
+cleaner edges, fewer obvious artifacts, and more consistent backgrounds, and most grids now contain
+the correct object type in nearly every cell. Overall, both visual fidelity and prompt (class)
+adherence steadily increase during training, with the largest gains occurring early (around epoch
+5 -> 25) and smaller refinements by epoch 49.
 
 ---
 
@@ -342,7 +373,7 @@ Image_Generation_Configs:
     n_T: 1000
     beta1: 1.0e-4
     beta2: 2.0e-2
-    gpt2_layer_index: 11
+    gpt2_layer_index: 12
     gpt2_cache_dir: ./data/gpt2
 
     # class ids 0-9 follow CIFAR-10 order:
@@ -367,11 +398,12 @@ containing a grid of class‑conditioned samples (no GPT‑2 context used; DiT u
 
 > **Visualization here:**  
 > - Generated images for each labels in order.  
+
 <p align="center">
   <img src="./experiments/qformer_dense/samples/classes/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 2. Example generation for classes.</em></p>
+<p align="center"><em>Figure 5. Example generation for classes.</em></p>
 
 ---
 
@@ -418,11 +450,12 @@ This will:
 
 > **Visualization here:**  
 > - Generated image grids per prompt set.  
+
 <p align="center">
   <img src="./experiments/qformer_dense/samples/prompts/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 3. Example generation for prompts conditioned.</em></p>
+<p align="center"><em>Figure 6. Example generation for prompts conditioned.</em></p>
 
 ---
 
@@ -484,19 +517,19 @@ Each PNG is a `[Q, K]` heatmap:
 
 > **Visualization here:**  
 > - These heatmaps clearly show which tokens each query attends to over the sampling trajectory.  
-> - You can check whether Q‑Former spreads attention across relevant tokens or collapses onto a single position (attention sink).
+> - One can check whether Q‑Former spreads attention across relevant tokens or collapses onto a single position (attention sink).
 
 <p align="center">
   <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t100.png" width="600">
 </p>
 
-<p align="center"><em>Figure 4. Attention map with t=100. </em></p>
+<p align="center"><em>Figure 7. Attention map with t=100. </em></p>
 
 <p align="center">
   <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t500.png" width="600">
 </p>
 
-<p align="center"><em>Figure 5. Attention map with t=500. </em></p>
+<p align="center"><em>Figure 8. Attention map with t=500. </em></p>
 
 ---
 
@@ -569,13 +602,13 @@ experiments/ood/ood_vehicle_water/
   <img src="./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 6. Vehicles go on grass. </em></p>
+<p align="center"><em>Figure 9. Vehicles go on grass. </em></p>
 
 <p align="center">
   <img src="./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 7. Vehicles go in water. </em></p>
+<p align="center"><em>Figure 10. Vehicles go in water. </em></p>
 
 ---
 
@@ -604,25 +637,62 @@ Generated images and attention maps will appear under `experiments/...` and can 
 
 ## Results & suggested plots
 
-When preparing slides / report from this repo, typical result sections:
+In this section I summarize the main phenomena I observe from current implemented LLM2DiT, organized into four themes.
 
-1. **Training dynamics**
-   - Plot Q‑Former training loss (`loss` or `loss_ema`) vs iterations/epochs from WandB.
-   - Show how text conditioning stabilizes or destabilizes training.
+### 1. Guidance scale vs text–image alignment
 
-2. **Sample quality**
-   - Side‑by‑side grids:
-     - Class‑conditioned DiT vs text‑conditioned LLM2DiT.
-     - Different prompts for the same class to show controllability.
-   - Optional: FID or simple classifier‑based accuracy for rough quantitative comparison.
+I sweep the classifier-free guidance scale \(w \in \{1.0, 2.0, 3.0, 4.0\}\) for a fixed caption (e.g., “a photo of a deer in the grass”). As \(w\) increases, the samples become progressively more “on-prompt”: the animal shape and grassy background emerge clearly, and fine details such as antlers and body pose sharpen. However, very large guidance (around \(w=4.0\)) over-amplifies the conditional signal and introduces artifacts: neon-like grass, oversharpened edges, and stair-step textures. I find that \(w \approx 3.0\) offers the best tradeoff between realism and text consistency—lower values are too noisy and ambiguous, while higher values tend to look overconfident and synthetic.
 
-3. **Q‑Former cross‑attention patterns**
-   - Heatmaps `qformer_attn_t*.png` at different timesteps.
-   - Compare:
-     - Prompts where Q‑Former focuses on semantically meaningful tokens (e.g., “truck”, “airplane”).
-     - Prompts where attention collapses to the first token (attention sink).
+<p align="center">
+  <img src="./assets/cfg_sweep.png" width="600">
+</p>
 
-These three categories (loss curves, image grids, attention heatmaps) already give a coherent story for the project.
+<p align="center"><em>Figure 11. Classifier-Free Guidance Sweep {1.0, 2.0, 3.0, 4.0} of A Deer In the Grass </em></p>
+
+---
+
+### 2. Class-conditioned vs LLM2DiT text-conditioned cars
+
+I compare two grids of “automobile” images at the same guidance scale. The first grid uses the original class-conditional DiT with only the CIFAR-10 label, while the second uses LLM2DiT with the caption “a photo of a blue automobile with a bright blue sky.”  
+
+The class-conditional baseline mainly captures category information: most samples are recognizable cars, but colors and backgrounds are highly varied, and many images lack blue skies entirely. In contrast, the LLM2DiT samples show a clear shift: cars are predominantly blue or bluish, and backgrounds contain larger, brighter sky regions. This contrast indicates that the Q-Former successfully injects fine-grained semantic cues from GPT-2 (color + context), not just the coarse class label.
+
+<p align="center">
+  <img src="./assets/class_vs_text.png" width="600">
+</p>
+
+<p align="center"><em>Figure 12. Pretrained Classifier-Conditioned DiT VS Fine-Tuned Q-Former Text-Conditioned DiT </em></p>
+
+---
+
+### 3. In-distribution vs OOD underspecified prompts
+
+To probe generalization, I generate vehicles from two underspecified prompts at the same guidance scale:  
+(1) “a photo of a vehicle that goes on grass” and  
+(2) “a photo of a vehicle that goes in water.”  
+
+For “grass” prompts, the images stay close to in-distribution CIFAR-10 automobiles: sedans or trucks on green ground, trees, or fields. For “water” prompts, the model starts to extrapolate: shapes become more boat-like, hulls and decks appear, and backgrounds resemble harbors or open water with a cooler blue/gray palette. Geometry is often noisier, but there is a consistent attempt to reconcile “vehicle” with “water.” These grids suggest that LLM2DiT can partially adapt both object shape and background to satisfy OOD textual constraints, even though the base DiT was only trained on terrestrial vehicles.
+
+<p align="center">
+  <img src="./assets/indistributed_vs_ood.png" width="600">
+</p>
+
+<p align="center"><em>Figure 13. In-Distributed Prompts VS OOD Prompts </em></p>
+
+---
+
+### 4. Cross-attention dynamics and attention sink
+
+Finally, I visualize Q-Former cross-attention for a caption such as “a photo of a red airplane with a green field in the background” at multiple diffusion timesteps (e.g., \(t=500\) and \(t=100\)). The heatmaps average over heads and show attention from each query to GPT-2 tokens.
+
+Across timesteps, I observe a strong **attention sink** pattern: most queries allocate the majority of their mass to the first token, while semantically important words like “red,” “airplane,” and “green field” receive noticeably less attention. The pattern changes only mildly as sampling progresses—later timesteps spread a bit more weight to noun tokens, but the first position remains dominant. The final generated image still roughly matches “airplane + outdoors,” which implies that the first token’s representation has collapsed into a global summary of the whole caption. This behavior motivates future work: introducing regularizers or architectural changes to encourage more balanced use of the full sequence and reduce reliance on a single summary token.
+
+<p align="center">
+  <img src="./assets/attn_analysis.png" width="600">
+</p>
+
+<p align="center"><em>Figure 14. Cross-Attention Map Analysis </em></p>
+
 
 ---
 
