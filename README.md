@@ -58,7 +58,7 @@ LLM2DiT/
 │
 ├─ experiments/
 │  ├─ qformer_dense/
-│  │  ├─ checkpoints/                  # Trained Q‑Former + DiT weights
+│  │  ├─ optimizer_ckpts/              # Trained Q‑Former + DiT weights and optimizer weights
 │  │  ├─ samples/                      # Sample grids during training
 │  │  └─ logs/                         # (Optional) extra logs, if needed
 │  └─ attn_maps/                       # Saved Q‑Former cross‑attention heatmaps
@@ -701,9 +701,10 @@ Across timesteps, I observe a strong **attention sink** pattern: most queries al
 If you keep `tests/test_all.py`, you can quickly verify core functionality:
 
 ```bash
-PYTHONPATH=src pytest tests/test_all.py
+export PYTHONPATH=$PWD/src:$PWD/src/models:$PYTHONPATH
+python3 -m tests.test_all
 # or
-PYTHONPATH=src python tests/test_all.py
+PYTHONPATH=./src:./src/models python3 -m tests.test_all
 ```
 
 This covers:
