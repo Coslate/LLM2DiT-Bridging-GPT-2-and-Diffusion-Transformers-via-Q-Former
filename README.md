@@ -14,7 +14,7 @@ The goal is to prototype and analyze how text representations from a causal LM c
   <img src="assets/overview_arch.png" width="600">
 </p>
 
-<p align="center"><em>Figure 1. Q-Former architecture bridging GPT-2 and DiT for text-to-image generation.</em></p>
+<p align="center"><em>Figure 1. Q-Former Architecture Bridging GPT-2 and DiT for Text-to-Image Generation.</em></p>
 
 
 ---
@@ -403,7 +403,7 @@ containing a grid of class‑conditioned samples (no GPT‑2 context used; DiT u
   <img src="./experiments/qformer_dense/samples/classes/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 5. Example generation for classes.</em></p>
+<p align="center"><em>Figure 5. Example Generation for Classes.</em></p>
 
 ---
 
@@ -455,7 +455,7 @@ This will:
   <img src="./experiments/qformer_dense/samples/prompts/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 6. Example generation for prompts conditioned.</em></p>
+<p align="center"><em>Figure 6. Example Generation for Prompts Conditioning.</em></p>
 
 ---
 
@@ -523,13 +523,13 @@ Each PNG is a `[Q, K]` heatmap:
   <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t100.png" width="600">
 </p>
 
-<p align="center"><em>Figure 7. Attention map with t=100. </em></p>
+<p align="center"><em>Figure 7. Attention Map with t=100. </em></p>
 
 <p align="center">
   <img src="./experiments/attn_maps/red_plane_cross_attn_maps/qformer_attn_t500.png" width="600">
 </p>
 
-<p align="center"><em>Figure 8. Attention map with t=500. </em></p>
+<p align="center"><em>Figure 8. Attention Map with t=500. </em></p>
 
 ---
 
@@ -602,13 +602,13 @@ experiments/ood/ood_vehicle_water/
   <img src="./experiments/ood/ood_vehicle_grass/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 9. Vehicles go on grass. </em></p>
+<p align="center"><em>Figure 9. Vehicles Go on Grass. </em></p>
 
 <p align="center">
   <img src="./experiments/ood/ood_vehicle_water/sample_qformer_infer_last.png" width="600">
 </p>
 
-<p align="center"><em>Figure 10. Vehicles go in water. </em></p>
+<p align="center"><em>Figure 10. Vehicles Go in Water. </em></p>
 
 ---
 
